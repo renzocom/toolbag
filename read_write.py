@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 import numpy as np
 
-def get_dataset_info(dataset_dir, filename, n_levels=0, dir_pattern=None):
+def get_dataset_info(dataset_dir, filename='*', n_levels=0, dir_pattern=None):
     if not Path(dataset_dir).is_dir():
         raise FileNotFoundError(dataset_dir)
 
@@ -58,7 +58,7 @@ def loadmat(filename):
     from mat files. It calls the function check keys to cure all entries
     which are still mat-objects
     """
-    data = spio.loadmat(filename, struct_as_record=False, squeeze_me=True)
+    data = sio.loadmat(filename, struct_as_record=False, squeeze_me=True)
     return _check_keys(data)
 
 
@@ -68,7 +68,7 @@ def _check_keys(dict_in):
     todict is called to change them to nested dictionaries
     """
     for key in dict_in:
-        if isinstance(dict_in[key], spio.matlab.mio5_params.mat_struct):
+        if isinstance(dict_in[key], sio.matlab.mio5_params.mat_struct):
             dict_in[key] = _todict(dict_in[key])
     return dict_in
 
@@ -80,7 +80,7 @@ def _todict(matobj):
     dict = {}
     for strg in matobj._fieldnames:
         elem = matobj.__dict__[strg]
-        if isinstance(elem, spio.matlab.mio5_params.mat_struct):
+        if isinstance(elem, sio.matlab.mio5_params.mat_struct):
             dict[strg] = _todict(elem)
         else:
             dict[strg] = elem
