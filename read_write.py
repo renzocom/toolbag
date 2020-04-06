@@ -36,6 +36,7 @@ def get_dataset_info(dataset_dir, filename='*', n_levels=0, dir_pattern=None):
     return np.array(data_path), np.array(data_info)
 
 def save_pickle(fname, variable):
+    fname = str(fname)
     if not fname.endswith('.pkl'):
         fname += '.pkl'
     output = open(fname, 'wb')
@@ -44,6 +45,7 @@ def save_pickle(fname, variable):
 
 
 def load_pickle(fname):
+    fname = str(fname)
     if not fname.endswith('.pkl'):
         fname += '.pkl'
     pkl_file = open(fname, 'rb')
@@ -51,14 +53,15 @@ def load_pickle(fname):
     pkl_file.close()
     return variable
 
-def loadmat(filename):
+def loadmat(fname):
     """
     this function should be called instead of direct spio.loadmat
     as it cures the problem of not properly recovering python dictionaries
     from mat files. It calls the function check keys to cure all entries
     which are still mat-objects
     """
-    data = sio.loadmat(filename, struct_as_record=False, squeeze_me=True)
+    fname = str(fname)
+    data = sio.loadmat(fname, struct_as_record=False, squeeze_me=True)
     return _check_keys(data)
 
 
